@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import React from 'react';
 import { Table, Input, Button, Icon } from 'antd';
 
-import styles from './App.m.css';
+import styles from './Admin.m.css';
 
 type Data = {[string]:any}
 

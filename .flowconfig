@@ -9,8 +9,10 @@ ramda
 react-i18next
 recompose
 reselect
-react-redux
 history
+apollo-client
+apollo-link-http
+react-apollo
 
 [lints]
 

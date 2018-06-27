@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ApolloProvider } from 'react-apollo';
 import { I18nextProvider } from 'react-i18next';
 import {
   Router,
@@ -12,18 +11,16 @@ import i18nInstance from './i18next';
 import AppRoute from '../AppRoute';
 
 import history from './history';
-import store from './store';
+import graphqlClient from './graphqlClient';
 
 const Root = () => (
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <I18nextProvider i18n={i18nInstance}>
-        <Router history={history}>
-          <AppRoute />
-        </Router>
-      </I18nextProvider>
-    </ConnectedRouter>
-  </Provider>
+  <ApolloProvider client={graphqlClient}>
+    <I18nextProvider i18n={i18nInstance}>
+      <Router history={history}>
+        <AppRoute />
+      </Router>
+    </I18nextProvider>
+  </ApolloProvider>
 );
 
 export default Root;
