@@ -1,0 +1,22 @@
+version: 2
+jobs:
+    build:
+        working_directory: ~/app
+        docker:
+            - image: node:10
+        steps:
+            - checkout
+            - run:
+                name: Install Dependencies
+                command: yarn install
+            - run:
+                name: Flow and lint
+                command: yarn run pre-release
+            - run:
+                name: Test
+                command: yarn run test
+workflows:
+    version: 2
+    build_and_test:
+        jobs:
+            - build
