@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+
+import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
 
 const dataSource = [
@@ -35,11 +37,13 @@ const columns = [
   { title: '封存理由', dataIndex: 'archive_reason', key: 'archive_reason' },
 ];
 
-const InterviewView = () => (
-  <FunctionalTable
-    columns={columns}
-    dataSource={dataSource}
-  />
+const WorkExperience = () => (
+  <AdminLayout>
+    <FunctionalTable
+      columns={columns}
+      dataSource={dataSource}
+    />
+  </AdminLayout>
 );
 
-export default InterviewView;
+export default WorkExperience;
