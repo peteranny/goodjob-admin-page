@@ -15,3 +15,9 @@ export const appendTodo = gql`
     appendTodo(id: $id, value: $value) @client
   }
 `;
+
+// export const postTodo = gql`
+//   mutation postTodoProps($title, $date) {
+//     postTodoApi($title, $date) @rest
+//   }
+// `;

@@ -20,7 +20,7 @@ const stateLink = withClientState({
   defaults,
 });
 
-const uri = `${REACT_APP_API_HOST}/`;
+const uri = `${REACT_APP_API_HOST}/graphql`;
 
 const httpLink = new HttpLink({
   uri,

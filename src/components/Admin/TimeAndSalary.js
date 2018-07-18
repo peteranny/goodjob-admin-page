@@ -1,61 +1,113 @@
 // @flow
 import React from 'react';
+import { graphql } from 'react-apollo';
+
+import {
+  withState,
+  withProps,
+  compose,
+  type HOC,
+} from 'recompose';
+
+import { getTimeSalaryQL } from '../../graphql/TimeAndSalary/';
+import type { ExperienceType } from '../../shared/types/experienceType';
 
 import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
+import WrapTable from '../../shared/hoc/WrapTable';
 
-const dataSource = [
-  {
-    key: '1',
-    id: 'a',
-    company: 'Droi',
-    job_title: '資深工程師',
-    salary_type: '月薪',
-    salary_amount: 66000,
-    expected_hourly_wage: 275,
-    estimated_hourly_wage: 275,
-    weekly_wage: 16500,
-    job_type: '?',
-    archive_status: 'archived',
-    archive_reason: 'You cant see me',
-  },
-  {
-    key: '2',
-    id: 'b',
-    company: '同光',
-    job_title: '小組長',
-    salary_type: '月薪',
-    salary_amount: 0,
-    expected_hourly_wage: 0,
-    estimated_hourly_wage: 0,
-    weekly_wage: 0,
-    job_type: '?',
-    archive_status: 'unarchived',
-    archive_reason: 'You can see me',
-  },
+const COLUMNS = [
+  { title: 'ID', dataIndex: 'id', key: 'id', filterVisible: false },
+  { title: '公司', dataIndex: 'company', key: 'company', searchable: true, showSearchValue: '', filterVisible: false },
+  { title: '職稱', dataIndex: 'job_title', key: 'job_title', searchable: true, showSearchValue: '', filterVisible: false },
+  { title: '薪資種類', dataIndex: 'salary_type', key: 'salary_type', filterVisible: false },
+  { title: '薪資金額', dataIndex: 'salary_amount', key: 'salary_amount', sortable: true, filterVisible: false },
+  { title: '實際平均工時', dataIndex: 'estimated_hourly_wage', key: 'estimated_hourly_wage', sortable: true, filterVisible: false },
+  { title: '一週總工時', dataIndex: 'week_work_time', key: 'week_work_time', sortable: true, filterVisible: false },
+  { title: '封存狀態', dataIndex: 'archive_status', key: 'archive_status', filterVisible: false },
+  { title: '封存理由', dataIndex: 'archive_reason', key: 'archive_reason', filterVisible: false },
 ];
 
-const columns = [
-  { title: 'ID', dataIndex: 'id', key: 'id' },
-  { title: '公司', dataIndex: 'company', key: 'company' },
-  { title: '職稱', dataIndex: 'job_title', key: 'job_title' },
-  { title: '薪資種類', dataIndex: 'salary_type', key: 'salary_type' },
-  { title: '薪資金額', dataIndex: 'salary_amount', key: 'salary_amount', sortable: true },
-  { title: '工作日表訂工時', dataIndex: 'expected_hourly_wage', key: 'expected_hourly_wage', sortable: true },
-  { title: '實際平均工時', dataIndex: 'estimated_hourly_wage', key: 'estimated_hourly_wage', sortable: true },
-  { title: '一週總工時', dataIndex: 'weekly_wage', key: 'weekly_wage', sortable: true },
-  { title: '職務型態', dataIndex: 'job_type', key: 'job_type' },
-  { title: '封存狀態', dataIndex: 'archive_status', key: 'archive_status' },
-  { title: '封存理由', dataIndex: 'archive_reason', key: 'archive_reason' },
-];
+type Props = {};
 
-const TimeAndSalary = () => (
+type PropsFromHOC = {
+  expData: Array<ExperienceType>,
+  setSearchObj: ({
+    columnKey: string,
+    value: string,
+  }) => void,
+};
+
+const TimeAndSalary = ({
+  setSearchObj,
+  expData,
+}: Props & PropsFromHOC) => (
   <AdminLayout>
-    <FunctionalTable
-      columns={columns}
-      dataSource={dataSource}
+    <WrapTable
+      _columns={COLUMNS}
+      setSearchObj={setSearchObj}
+      renderProps={({
+        columns,
+        changeColumnSearchValue,
+        setFilterVisible,
+        submitSearchObj,
+      }) => (
+        <FunctionalTable
+          columns={columns}
+          dataSource={expData}
+          changeColumnSearchValue={changeColumnSearchValue}
+          setFilterVisible={setFilterVisible}
+          submitSearchObj={submitSearchObj}
+        />
+      )}
     />
   </AdminLayout>
 );
 
-export default TimeAndSalary;
+const hoc: HOC<*, Props> = compose(
+  withState('searchObj', 'setSearchObj', { columnKey: 'COMPANY', value: '' }),
+  graphql(getTimeSalaryQL, {
+    options: (props) => {
+      const {
+        searchObj: {
+          columnKey,
+          value,
+        },
+      } = props;
+
+      return ({
+        variables: {
+          queryExp: {
+            search: {
+              query: value,
+              by: columnKey.toUpperCase(),
+            },
+          },
+        },
+      });
+    },
+  }),
+  withProps(({
+    data: {
+      workings,
+    },
+  }) => {
+    const _expData = (workings && workings.data) || [];
+    const expData = _expData.map(data => ({
+      ...data,
+      id: data._id,
+      key: data._id,
+      company: data.company.name,
+      salary_type: data.salary.type,
+      salary_amount: data.salary.amount,
+      archive_status: data.archive && data.archive.is_archive,
+      archive_reason: data.archive && data.archive.reason ? data.archive.reason : null,
+    }));
+
+    return ({
+      expData,
+    });
+  }),
+);
+
+export default hoc(TimeAndSalary);

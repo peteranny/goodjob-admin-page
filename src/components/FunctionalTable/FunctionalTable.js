@@ -11,89 +11,90 @@ type Column = {
   title: string,
   dataIndex: string,
   key: string,
+  searchable?: boolean,
+  showSearchValue?: string,
+  filterVisible?: boolean,
   sortable?: boolean,
+  width?: string,
 }
 
 type Props = {
   dataSource: Array<Data>,
   columns: Array<Column>,
+  changeColumnSearchValue?: (e: Event) => (key: string) => any,
+  setFilterVisible?: (columnKey: string, filterVisible: boolean) => any,
+  submitSearchObj?: (columnKey: string, submitValue: ?string) => any,
 }
 
 type State = {
-  searchId: string,
-  filtered: boolean,
-  filterDropdownVisible: boolean,
-  displayedData: Array<Data>,
   selectedRowKeys: Array<string>
 }
 
 class FunctionalTable extends React.Component<Props, State> {
   state = {
-    searchId: '',
-    filtered: false,
-    filterDropdownVisible: false,
-    displayedData: this.props.dataSource,
     selectedRowKeys: [],
-  }
-
-  onIdSearch = () => {
-    const { searchId } = this.state;
-    const reg = new RegExp(searchId, 'gi');
-    this.setState({
-      filterDropdownVisible: false,
-      filtered: !!searchId,
-      displayedData: this.props.dataSource.filter(dataRow => dataRow.id.match(reg)),
-    });
   }
 
   onSelectChange = (selectedRowKeys: Array<string>) => {
     this.setState({ selectedRowKeys });
   }
 
-  onIdInputChange = (e: Event) => {
-    this.setState({
-      searchId: (e.target: window.HTMLInputElement).value,
-    });
-  }
+  makeColumnsSearchable = (columns: Array<Column>): Array<any> => columns.map((curColumn) => {
+    const {
+      changeColumnSearchValue,
+      setFilterVisible,
+      submitSearchObj,
+    } = this.props;
 
-  onIdSearch = () => {
-    const { searchId } = this.state;
-    const reg = new RegExp(searchId, 'gi');
-    this.setState({
-      filterDropdownVisible: false,
-      filtered: !!searchId,
-      displayedData: this.props.dataSource.filter(dataRow => dataRow.id.match(reg)),
-    });
-  }
+    if (curColumn.searchable) {
+      const {
+        key,
+        title,
+        filterVisible,
+      } = curColumn;
 
-  searchInput: ?HTMLInputElement;
+      return {
+        ...curColumn,
+        filterDropdown: (
+          <div className={styles['custom-filter-dropdown']}>
+            <Input
+              placeholder={`Search ${title}`}
+              value={curColumn.showSearchValue}
+              onChange={(e) => {
+                if (changeColumnSearchValue) {
+                  changeColumnSearchValue(e)(key);
+                }
+              }}
+              onPressEnter={() => {
+                if (submitSearchObj) {
+                  submitSearchObj(key, curColumn.showSearchValue);
+                }
+              }}
+            />
+            <Button
+              type="primary"
+              onClick={() => {
+                if (submitSearchObj) {
+                  submitSearchObj(key, curColumn.showSearchValue);
+                }
+              }}
+            >
+              Search
+            </Button>
+          </div>
+        ),
+        filterIcon: <Icon type="filter" style={{ color: curColumn.showSearchValue ? '#108ee9' : '#aaa' }} />,
+        filterDropdownVisible: filterVisible,
+        onFilterDropdownVisibleChange: (filterDropdownVisible: boolean) => {
+          if (setFilterVisible) {
+            setFilterVisible(key, filterDropdownVisible);
+          }
+        },
+      };
+    }
 
-  makeIdColumnSearchable = ([idColumn, ...restColumns]: Array<Column>) => [
-    {
-      ...idColumn,
-      filterDropdown: (
-        <div className={styles['custom-filter-dropdown']}>
-          <Input
-            ref={(ele) => { this.searchInput = ele; }}
-            placeholder="Search ID"
-            value={this.state.searchId}
-            onChange={this.onIdInputChange}
-            onPressEnter={this.onIdSearch}
-          />
-          <Button type="primary" onClick={this.onIdSearch}>Search</Button>
-        </div>
-      ),
-      filterIcon: <Icon type="smile-o" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
-      filterDropdownVisible: this.state.filterDropdownVisible,
-      onFilterDropdownVisibleChange: (filterDropdownVisible: boolean) => {
-        this.setState(
-          { filterDropdownVisible },
-          () => { this.searchInput && this.searchInput.focus(); },
-        );
-      },
-    },
-    ...restColumns,
-  ]
+    return curColumn;
+  })
 
   makeColumnsSortable = (columns: Array<Column>) => (columns.map(column => (column.sortable ? ({
     ...column,
@@ -101,7 +102,7 @@ class FunctionalTable extends React.Component<Props, State> {
   }) : column)): Array<Column>)
 
   processColumns = R.pipe(
-    this.makeIdColumnSearchable,
+    this.makeColumnsSearchable,
     this.makeColumnsSortable,
   )
 
@@ -111,11 +112,12 @@ class FunctionalTable extends React.Component<Props, State> {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
+    const { dataSource } = this.props;
 
     return (
       <Table
         rowSelection={rowSelection}
-        dataSource={this.state.displayedData}
+        dataSource={dataSource}
         columns={this.processColumns(this.props.columns)}
         scroll={{ x: 1300 }}
       />
