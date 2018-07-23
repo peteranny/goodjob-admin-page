@@ -58,6 +58,15 @@ const TimeAndSalary = ({
           changeColumnSearchValue={changeColumnSearchValue}
           setFilterVisible={setFilterVisible}
           submitSearchObj={submitSearchObj}
+          displayedFormFields={[
+            '_id',
+            'company',
+            'job_title',
+            'estimated_hourly_wage',
+            'week_work_time',
+            'salary_type',
+            'salary_amount',
+          ]}
         />
       )}
     />

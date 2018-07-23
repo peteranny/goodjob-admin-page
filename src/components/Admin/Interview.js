@@ -56,6 +56,13 @@ const Interview = ({
           changeColumnSearchValue={changeColumnSearchValue}
           setFilterVisible={setFilterVisible}
           submitSearchObj={submitSearchObj}
+          displayedFormFields={[
+            '_id',
+            'title',
+            'company',
+            'job_title',
+            'region',
+          ]}
         />
       )}
     />

@@ -2,7 +2,9 @@
 import * as R from 'ramda';
 import React from 'react';
 import { Table, Input, Button, Icon } from 'antd';
+import { compose, withState, withHandlers } from 'recompose';
 
+import EditModal from './EditModal';
 import styles from './FunctionalTable.m.css';
 
 type Data = {[string]:any}
@@ -24,6 +26,16 @@ type Props = {
   changeColumnSearchValue?: (e: Event) => (key: string) => any,
   setFilterVisible?: (columnKey: string, filterVisible: boolean) => any,
   submitSearchObj?: (columnKey: string, submitValue: ?string) => any,
+
+  isEditModalVisible: boolean,
+  setEditModalVisible: boolean => void,
+  handleOk: () => void,
+  handleCancel: () => void,
+
+  form: Data,
+  setForm: (form: Data) => void,
+  setFormField: (field: string) => (e: Event) => void,
+  displayedFormFields: Array<string>,
 }
 
 type State = {
@@ -101,9 +113,30 @@ class FunctionalTable extends React.Component<Props, State> {
     sorter: (dataRowA, dataRowB) => dataRowB[column.dataIndex] - dataRowA[column.dataIndex],
   }) : column)): Array<Column>)
 
+  appendActionColumn = columns => [
+    ...columns,
+    {
+      title: 'Actions',
+      key: 'action',
+      fixed: 'right',
+      width: 100,
+      render: record => (
+        <Button
+          onClick={() => {
+            this.props.setForm(record);
+            this.props.setEditModalVisible(true);
+          }}
+        >
+          <Icon type="edit" />Edit
+        </Button>
+      ),
+    },
+  ]
+
   processColumns = R.pipe(
     this.makeColumnsSearchable,
     this.makeColumnsSortable,
+    this.appendActionColumn,
   )
 
   render() {
@@ -112,17 +145,68 @@ class FunctionalTable extends React.Component<Props, State> {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-    const { dataSource } = this.props;
+    const {
+      dataSource,
+
+      isEditModalVisible,
+      handleOk,
+      handleCancel,
+
+      form,
+      setFormField,
+      displayedFormFields,
+    } = this.props;
 
     return (
-      <Table
-        rowSelection={rowSelection}
-        dataSource={dataSource}
-        columns={this.processColumns(this.props.columns)}
-        scroll={{ x: 1300 }}
-      />
+      <React.Fragment>
+        <EditModal
+          title="Edit"
+          visible={isEditModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          form={form}
+          setFormField={setFormField}
+          displayedFields={displayedFormFields}
+        />
+        <Table
+          rowSelection={rowSelection}
+          dataSource={dataSource}
+          columns={this.processColumns(this.props.columns)}
+          scroll={{ x: 1300 }}
+        />
+      </React.Fragment>
     );
   }
 }
 
-export default FunctionalTable;
+const withForm = compose(
+  withState('form', 'setForm', {}),
+  withHandlers({
+    setFormField: ({ form, setForm }) => field => (value) => {
+      setForm({
+        ...form,
+        [field]: value,
+      });
+    },
+  }),
+);
+
+const withEditModal = compose(
+  withState('isEditModalVisible', 'setEditModalVisible', false),
+  withHandlers({
+    handleOk: ({ form, setEditModalVisible }) => () => {
+      console.info(form);
+      setEditModalVisible(false);
+    },
+    handleCancel: ({ setEditModalVisible }) => () => {
+      setEditModalVisible(false);
+    },
+  }),
+);
+
+const enhance = compose(
+  withForm,
+  withEditModal,
+);
+
+export default enhance(FunctionalTable);
