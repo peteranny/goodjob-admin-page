@@ -1,0 +1,9 @@
+version: "3"
+services:
+  node:
+    image: goodjob-admin-page:stage
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        - REACT_APP_API_HOST=https://admin-api-stage.goodjob.life/
