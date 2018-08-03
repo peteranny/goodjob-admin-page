@@ -6,4 +6,4 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
       args:
-        - REACT_APP_API_HOST=https://admin-api-stage.goodjob.life/
+        - REACT_APP_API_HOST=https://admin-api-stage.goodjob.life
