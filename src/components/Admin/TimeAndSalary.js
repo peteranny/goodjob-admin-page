@@ -15,6 +15,7 @@ import type { ExperienceType } from '../../shared/types/experienceType';
 import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
 import WrapTable from '../../shared/hoc/WrapTable';
+import withPagination from '../../shared/hoc/withPagination';
 
 const COLUMNS = [
   { title: 'ID', dataIndex: 'id', key: 'id', filterVisible: false },
@@ -41,6 +42,7 @@ type PropsFromHOC = {
 const TimeAndSalary = ({
   setSearchObj,
   expData,
+  ...restProps
 }: Props & PropsFromHOC) => (
   <AdminLayout>
     <WrapTable
@@ -67,13 +69,14 @@ const TimeAndSalary = ({
             'salary_type',
             'salary_amount',
           ]}
+          {...restProps}
         />
       )}
     />
   </AdminLayout>
 );
 
-const hoc: HOC<*, Props> = compose(
+const withGraphqlData: HOC<*, Props> = compose(
   withState('searchObj', 'setSearchObj', { columnKey: 'COMPANY', value: '' }),
   graphql(getTimeSalaryQL, {
     options: (props) => {
@@ -82,6 +85,8 @@ const hoc: HOC<*, Props> = compose(
           columnKey,
           value,
         },
+        page,
+        pageSize,
       } = props;
 
       return ({
@@ -91,6 +96,8 @@ const hoc: HOC<*, Props> = compose(
               query: value,
               by: columnKey.toUpperCase(),
             },
+            start: (page - 1) * pageSize,
+            limit: pageSize,
           },
         },
       });
@@ -112,11 +119,18 @@ const hoc: HOC<*, Props> = compose(
       archive_status: data.archive && data.archive.is_archive,
       archive_reason: data.archive && data.archive.reason ? data.archive.reason : null,
     }));
+    const nData = workings ? workings.total : 0;
 
     return ({
       expData,
+      nData,
     });
   }),
+);
+
+const hoc = compose(
+  withPagination,
+  withGraphqlData,
 );
 
 export default hoc(TimeAndSalary);

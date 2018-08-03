@@ -36,6 +36,11 @@ type Props = {
   setForm: (form: Data) => void,
   setFormField: (field: string) => (e: Event) => void,
   displayedFormFields: Array<string>,
+
+  nData: number,
+  page: number,
+  pageSize: number,
+  handleTableChange: (pagination: {[string]: any}) => void,
 }
 
 type State = {
@@ -155,7 +160,18 @@ class FunctionalTable extends React.Component<Props, State> {
       form,
       setFormField,
       displayedFormFields,
+
+      nData,
+      page,
+      pageSize,
+      handleTableChange,
     } = this.props;
+
+    const pagination = {
+      total: nData,
+      pageSize,
+      current: page,
+    };
 
     return (
       <React.Fragment>
@@ -172,6 +188,8 @@ class FunctionalTable extends React.Component<Props, State> {
           rowSelection={rowSelection}
           dataSource={dataSource}
           columns={this.processColumns(this.props.columns)}
+          pagination={pagination}
+          onChange={handleTableChange}
           scroll={{ x: 1300 }}
         />
       </React.Fragment>
