@@ -42,12 +42,33 @@ jobs:
                         # push
                         docker push "${REGISTRY}:stage"
                     fi
+    deploy_stage:
+        working_directory: ~/app
+        docker:
+            - image: alpine
+        steps:
+            - run: apk add --update curl
+            - run:
+                name: Trigger Deploy
+                command: |
+                    if [ "${CIRCLE_PROJECT_USERNAME}" == "goodjoblife" ]; then
+                        curl --user ${CIRCLE_API_TOKEN_FOR_DEPLOY}: \
+                            --data build_parameters[CIRCLE_JOB]=build \
+                            https://circleci.com/api/v1.1/project/github/mark86092/goodjob-deploy-ci/tree/site/admin-page-stage
+                    fi
 workflows:
     version: 2
     build_and_test:
         jobs:
             - build
             - build_stage_docker:
+                filters:
+                    branches:
+                        only: master
+            - deploy_stage:
+                requires:
+                    - build
+                    - build_stage_docker
                 filters:
                     branches:
                         only: master
