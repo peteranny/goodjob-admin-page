@@ -3,7 +3,6 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 
 import {
-  withState,
   withProps,
   compose,
   type HOC,
@@ -14,8 +13,8 @@ import type { ExperienceType } from '../../shared/types/experienceType';
 
 import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
-import WrapTable from '../../shared/hoc/WrapTable';
 import withPagination from '../../shared/hoc/withPagination';
+import withSearchOption from '../../shared/hoc/withSearchOption';
 
 const COLUMNS = [
   { title: 'ID', dataIndex: 'id', key: 'id', filterVisible: false },
@@ -29,7 +28,19 @@ const COLUMNS = [
   { title: '封存理由', dataIndex: 'archive_reason', key: 'archive_reason', filterVisible: false },
 ];
 
-type Props = {};
+type Props = {
+  page: number,
+  pageSize: number,
+
+  searchObj: {
+    columnKey: string,
+    value: string,
+  },
+  setSearchObj: ({
+    columnKey: string,
+    value: string,
+  }) => void,
+};
 
 type PropsFromHOC = {
   expData: Array<ExperienceType>,
@@ -45,39 +56,24 @@ const TimeAndSalary = ({
   ...restProps
 }: Props & PropsFromHOC) => (
   <AdminLayout>
-    <WrapTable
+    <FunctionalTable
       _columns={COLUMNS}
-      setSearchObj={setSearchObj}
-      renderProps={({
-        columns,
-        changeColumnSearchValue,
-        setFilterVisible,
-        submitSearchObj,
-      }) => (
-        <FunctionalTable
-          columns={columns}
-          dataSource={expData}
-          changeColumnSearchValue={changeColumnSearchValue}
-          setFilterVisible={setFilterVisible}
-          submitSearchObj={submitSearchObj}
-          displayedFormFields={[
-            '_id',
-            'company',
-            'job_title',
-            'estimated_hourly_wage',
-            'week_work_time',
-            'salary_type',
-            'salary_amount',
-          ]}
-          {...restProps}
-        />
-      )}
+      dataSource={expData}
+      displayedFormFields={[
+        '_id',
+        'company',
+        'job_title',
+        'estimated_hourly_wage',
+        'week_work_time',
+        'salary_type',
+        'salary_amount',
+      ]}
+      {...restProps}
     />
   </AdminLayout>
 );
 
 const withGraphqlData: HOC<*, Props> = compose(
-  withState('searchObj', 'setSearchObj', { columnKey: 'COMPANY', value: '' }),
   graphql(getTimeSalaryQL, {
     options: (props) => {
       const {
@@ -129,6 +125,7 @@ const withGraphqlData: HOC<*, Props> = compose(
 );
 
 const hoc = compose(
+  withSearchOption,
   withPagination,
   withGraphqlData,
 );

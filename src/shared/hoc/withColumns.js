@@ -1,6 +1,4 @@
 // @flow
-import * as React from 'react';
-
 import {
   withState,
   withHandlers,
@@ -9,7 +7,7 @@ import {
   type HOC,
 } from 'recompose';
 
-type Row = {
+export type Column = {
   title: string,
   dataIndex: string,
   key: string,
@@ -21,46 +19,12 @@ type Row = {
 };
 
 type Props = {
-  _columns: Array<Row>,
-  setSearchObj: ({
-    columnKey: string,
-    value: string,
-  }) => any,
-  renderProps: ({
-    columns: Array<Row>,
-    changeColumnSearchValue: (e: Event) => (key: string) => any,
-    setFilterVisible: (columnKey: string, filterVisible: boolean) => any,
-    submitSearchObj: (columnKey: string, submitValue: ?string) => any,
-  }) => React.Node,
+  _columns: Array<Column>,
+  columns: Array<Column>,
+  setColumns: (columns: Array<Column>) => void,
 };
 
-type PropsFromHOC = {
-  columns: Array<Row>,
-  changeColumnSearchValue: (e: Event) => (key: string) => any,
-  setFilterVisible: (columnKey: string, filterVisible: boolean) => any,
-  submitSearchObj: (columnKey: string, submitValue: ?string) => any,
-};
-
-const WrapTable = ({
-  columns,
-  changeColumnSearchValue,
-  setFilterVisible,
-  submitSearchObj,
-  renderProps,
-}: Props & PropsFromHOC) => (
-  <React.Fragment>
-    {
-      renderProps({
-        columns,
-        changeColumnSearchValue,
-        setFilterVisible,
-        submitSearchObj,
-      })
-    }
-  </React.Fragment>
-);
-
-const hoc: HOC<*, Props> = compose(
+const withColumns: HOC<*, Props> = compose(
   withState('columns', 'setColumns', []),
   withHandlers({
     changeColumnSearchValue: props => (e: Event) => (columnKey) => {
@@ -87,7 +51,7 @@ const hoc: HOC<*, Props> = compose(
 
       setColumns(updatedColumns);
     },
-    setFilterVisible: props => (columnKey) => {
+    toggleFilterVisible: props => (columnKey) => {
       const {
         columns,
         setColumns,
@@ -107,14 +71,6 @@ const hoc: HOC<*, Props> = compose(
       });
 
       setColumns(updatedColumns);
-    },
-    submitSearchObj: props => (columnKey, submitValue) => {
-      const searchObj = {
-        columnKey,
-        value: submitValue,
-      };
-
-      props.setSearchObj(searchObj);
     },
   }),
   lifecycle({
@@ -141,4 +97,4 @@ const hoc: HOC<*, Props> = compose(
   }),
 );
 
-export default hoc(WrapTable);
+export default withColumns;

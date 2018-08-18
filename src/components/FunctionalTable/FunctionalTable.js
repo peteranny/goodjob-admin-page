@@ -1,39 +1,32 @@
 // @flow
-import * as R from 'ramda';
 import React from 'react';
-import { Table, Input, Button, Icon } from 'antd';
+import { Table } from 'antd';
 import { compose, withState, withHandlers } from 'recompose';
 
+// eslint-disable-next-line import/no-named-default
+import { type Column, default as withColumns } from '../../shared/hoc/withColumns';
+import {
+  withActionColumnAppended,
+  withColumnsSearchable,
+  withColumnsSortable,
+} from '../../shared/hoc/withColumnsEnhanced';
+
 import EditModal from './EditModal';
-import styles from './FunctionalTable.m.css';
 
 type Data = {[string]:any}
 
-type Column = {
-  title: string,
-  dataIndex: string,
-  key: string,
-  searchable?: boolean,
-  showSearchValue?: string,
-  filterVisible?: boolean,
-  sortable?: boolean,
-  width?: string,
-}
-
 type Props = {
+  selectedRowKeys: Array<string>,
+  onSelectChange: (selectedRowKeys: Array<string>) => void,
+
   dataSource: Array<Data>,
   columns: Array<Column>,
-  changeColumnSearchValue?: (e: Event) => (key: string) => any,
-  setFilterVisible?: (columnKey: string, filterVisible: boolean) => any,
-  submitSearchObj?: (columnKey: string, submitValue: ?string) => any,
 
   isEditModalVisible: boolean,
-  setEditModalVisible: boolean => void,
   handleOk: () => void,
   handleCancel: () => void,
 
   form: Data,
-  setForm: (form: Data) => void,
   setFormField: (field: string) => (e: Event) => void,
   displayedFormFields: Array<string>,
 
@@ -43,159 +36,62 @@ type Props = {
   handleTableChange: (pagination: {[string]: any}) => void,
 }
 
-type State = {
-  selectedRowKeys: Array<string>
-}
+const FunctionalTable = ({
+  selectedRowKeys,
+  onSelectChange,
 
-class FunctionalTable extends React.Component<Props, State> {
-  state = {
-    selectedRowKeys: [],
-  }
+  dataSource,
+  columns,
 
-  onSelectChange = (selectedRowKeys: Array<string>) => {
-    this.setState({ selectedRowKeys });
-  }
+  isEditModalVisible,
+  handleOk,
+  handleCancel,
 
-  makeColumnsSearchable = (columns: Array<Column>): Array<any> => columns.map((curColumn) => {
-    const {
-      changeColumnSearchValue,
-      setFilterVisible,
-      submitSearchObj,
-    } = this.props;
+  form,
+  setFormField,
+  displayedFormFields,
 
-    if (curColumn.searchable) {
-      const {
-        key,
-        title,
-        filterVisible,
-      } = curColumn;
+  nData,
+  page,
+  pageSize,
+  handleTableChange,
+}: Props) => (
+  <React.Fragment>
+    <EditModal
+      title="Edit"
+      visible={isEditModalVisible}
+      onOk={handleOk}
+      onCancel={handleCancel}
+      form={form}
+      setFormField={setFormField}
+      displayedFields={displayedFormFields}
+    />
+    <Table
+      rowSelection={{
+        selectedRowKeys,
+        onChange: onSelectChange,
+      }}
+      dataSource={dataSource}
+      columns={columns}
+      pagination={{
+        total: nData,
+        pageSize,
+        current: page,
+      }}
+      onChange={handleTableChange}
+      scroll={{ x: 1300 }}
+    />
+  </React.Fragment>
+);
 
-      return {
-        ...curColumn,
-        filterDropdown: (
-          <div className={styles['custom-filter-dropdown']}>
-            <Input
-              placeholder={`Search ${title}`}
-              value={curColumn.showSearchValue}
-              onChange={(e) => {
-                if (changeColumnSearchValue) {
-                  changeColumnSearchValue(e)(key);
-                }
-              }}
-              onPressEnter={() => {
-                if (submitSearchObj) {
-                  submitSearchObj(key, curColumn.showSearchValue);
-                }
-              }}
-            />
-            <Button
-              type="primary"
-              onClick={() => {
-                if (submitSearchObj) {
-                  submitSearchObj(key, curColumn.showSearchValue);
-                }
-              }}
-            >
-              Search
-            </Button>
-          </div>
-        ),
-        filterIcon: <Icon type="filter" style={{ color: curColumn.showSearchValue ? '#108ee9' : '#aaa' }} />,
-        filterDropdownVisible: filterVisible,
-        onFilterDropdownVisibleChange: (filterDropdownVisible: boolean) => {
-          if (setFilterVisible) {
-            setFilterVisible(key, filterDropdownVisible);
-          }
-        },
-      };
-    }
-
-    return curColumn;
-  })
-
-  makeColumnsSortable = (columns: Array<Column>) => (columns.map(column => (column.sortable ? ({
-    ...column,
-    sorter: (dataRowA, dataRowB) => dataRowB[column.dataIndex] - dataRowA[column.dataIndex],
-  }) : column)): Array<Column>)
-
-  appendActionColumn = columns => [
-    ...columns,
-    {
-      title: 'Actions',
-      key: 'action',
-      fixed: 'right',
-      width: 100,
-      render: record => (
-        <Button
-          onClick={() => {
-            this.props.setForm(record);
-            this.props.setEditModalVisible(true);
-          }}
-        >
-          <Icon type="edit" />Edit
-        </Button>
-      ),
+const withSelectedRowKeys = compose(
+  withState('selectedRowKeys', 'setSelectedRowKeys', []),
+  withHandlers({
+    onSelectChange: ({ setSelectedRowKeys }) => (selectedRowKeys) => {
+      setSelectedRowKeys(selectedRowKeys);
     },
-  ]
-
-  processColumns = R.pipe(
-    this.makeColumnsSearchable,
-    this.makeColumnsSortable,
-    this.appendActionColumn,
-  )
-
-  render() {
-    const { selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
-    const {
-      dataSource,
-
-      isEditModalVisible,
-      handleOk,
-      handleCancel,
-
-      form,
-      setFormField,
-      displayedFormFields,
-
-      nData,
-      page,
-      pageSize,
-      handleTableChange,
-    } = this.props;
-
-    const pagination = {
-      total: nData,
-      pageSize,
-      current: page,
-    };
-
-    return (
-      <React.Fragment>
-        <EditModal
-          title="Edit"
-          visible={isEditModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          form={form}
-          setFormField={setFormField}
-          displayedFields={displayedFormFields}
-        />
-        <Table
-          rowSelection={rowSelection}
-          dataSource={dataSource}
-          columns={this.processColumns(this.props.columns)}
-          pagination={pagination}
-          onChange={handleTableChange}
-          scroll={{ x: 1300 }}
-        />
-      </React.Fragment>
-    );
-  }
-}
+  }),
+);
 
 const withForm = compose(
   withState('form', 'setForm', {}),
@@ -223,8 +119,13 @@ const withEditModal = compose(
 );
 
 const enhance = compose(
+  withSelectedRowKeys,
   withForm,
   withEditModal,
+  withColumns,
+  withColumnsSearchable,
+  withColumnsSortable,
+  withActionColumnAppended,
 );
 
 export default enhance(FunctionalTable);

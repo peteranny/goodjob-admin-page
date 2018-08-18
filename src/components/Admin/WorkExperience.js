@@ -3,7 +3,6 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 
 import {
-  withState,
   withProps,
   compose,
   type HOC,
@@ -14,8 +13,8 @@ import type { ExperienceType } from '../../shared/types/experienceType';
 
 import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
-import WrapTable from '../../shared/hoc/WrapTable';
 import withPagination from '../../shared/hoc/withPagination';
+import withSearchOption from '../../shared/hoc/withSearchOption';
 
 const COLUMNS = [
   { title: 'ID', dataIndex: 'id', key: 'id', filterVisible: false, width: '150px' },
@@ -27,7 +26,19 @@ const COLUMNS = [
   { title: '封存理由', dataIndex: 'archive_reason', key: 'archive_reason', filterVisible: false },
 ];
 
-type Props = {};
+type Props = {
+  page: number,
+  pageSize: number,
+
+  searchObj: {
+    columnKey: string,
+    value: string,
+  },
+  setSearchObj: ({
+    columnKey: string,
+    value: string,
+  }) => void,
+};
 
 type PropsFromHOC = {
   expData: Array<ExperienceType>,
@@ -45,37 +56,23 @@ const WorkExperience = ({
   ...restProps
 }: Props & PropsFromHOC) => (
   <AdminLayout>
-    <WrapTable
+    <FunctionalTable
       _columns={COLUMNS}
       setSearchObj={setSearchObj}
-      renderProps={({
-        columns,
-        changeColumnSearchValue,
-        setFilterVisible,
-        submitSearchObj,
-      }) => (
-        <FunctionalTable
-          columns={columns}
-          dataSource={expData}
-          changeColumnSearchValue={changeColumnSearchValue}
-          setFilterVisible={setFilterVisible}
-          submitSearchObj={submitSearchObj}
-          displayedFormFields={[
-            '_id',
-            'title',
-            'company',
-            'job_title',
-            'region',
-          ]}
-          {...restProps}
-        />
-      )}
+      dataSource={expData}
+      displayedFormFields={[
+        '_id',
+        'title',
+        'company',
+        'job_title',
+        'region',
+      ]}
+      {...restProps}
     />
   </AdminLayout>
 );
 
 const withGraphqlData: HOC<*, Props> = compose(
-  withState('searchObj', 'setSearchObj', { columnKey: 'COMPANY', value: '' }),
   graphql(getWorkExpQL, {
     options: (props) => {
       const {
@@ -125,6 +122,7 @@ const withGraphqlData: HOC<*, Props> = compose(
 );
 
 const hoc = compose(
+  withSearchOption,
   withPagination,
   withGraphqlData,
 );
