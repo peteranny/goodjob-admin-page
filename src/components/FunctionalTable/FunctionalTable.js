@@ -16,6 +16,8 @@ import EditModal from './EditModal';
 type Data = {[string]:any}
 
 type Props = {
+  isLoading: boolean,
+
   selectedRowKeys: Array<string>,
   onSelectChange: (selectedRowKeys: Array<string>) => void,
 
@@ -37,6 +39,8 @@ type Props = {
 }
 
 const FunctionalTable = ({
+  isLoading,
+
   selectedRowKeys,
   onSelectChange,
 
@@ -80,6 +84,7 @@ const FunctionalTable = ({
       }}
       onChange={handleTableChange}
       scroll={{ x: 1300 }}
+      loading={isLoading}
     />
   </React.Fragment>
 );

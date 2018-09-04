@@ -2,7 +2,7 @@
 import gql from 'graphql-tag';
 
 export const getWorkExpQL = gql`
-  query GetWorkExpQL($queryExp: QueryExperiencesIput!) {
+  query GetWorkExpQL($queryExp: QueryExperiencesInput!) {
     work_experiences(input: $queryExp) {
       total
       data {
@@ -15,7 +15,7 @@ export const getWorkExpQL = gql`
         title
         region
         archive {
-          is_archive
+          is_archived
           reason
         }
       }

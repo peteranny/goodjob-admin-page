@@ -11,7 +11,7 @@ export type Salary = {
 type SalaryType = 'year' | 'month' | 'day' | 'hour';
 
 export type Archive = {
-  is_archive: boolean,
+  is_archived: boolean,
   reason: ArchiveReason,
 }
 

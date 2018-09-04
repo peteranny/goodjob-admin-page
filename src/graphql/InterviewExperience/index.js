@@ -2,7 +2,7 @@
 import gql from 'graphql-tag';
 
 export const getInterviewExpQL = gql`
-  query GetInterviewExpQL($queryExp: QueryExperiencesIput!) {
+  query GetInterviewExpQL($queryExp: QueryExperiencesInput!) {
     interview_experiences(input: $queryExp) {
       total
       data {
@@ -15,7 +15,7 @@ export const getInterviewExpQL = gql`
         title
         region
         archive {
-          is_archive
+          is_archived
           reason
         }
       }

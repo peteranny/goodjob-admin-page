@@ -18,7 +18,7 @@ export const getTimeSalaryQL = gql`
         estimated_hourly_wage
         week_work_time
         archive {
-          is_archive
+          is_archived
           reason
         }
       }

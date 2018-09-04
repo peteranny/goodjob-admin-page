@@ -102,6 +102,7 @@ const withGraphqlData: HOC<*, Props> = compose(
   withProps(({
     data: {
       workings,
+      loading,
     },
   }) => {
     const _expData = (workings && workings.data) || [];
@@ -112,12 +113,13 @@ const withGraphqlData: HOC<*, Props> = compose(
       company: data.company.name,
       salary_type: data.salary.type,
       salary_amount: data.salary.amount,
-      archive_status: data.archive && data.archive.is_archive,
+      archive_status: data.archive && data.archive.is_archived,
       archive_reason: data.archive && data.archive.reason ? data.archive.reason : null,
     }));
     const nData = workings ? workings.total : 0;
 
     return ({
+      isLoading: loading,
       expData,
       nData,
     });
