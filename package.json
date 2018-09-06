@@ -125,7 +125,9 @@
   },
   "devDependencies": {
     "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^3.0.1",
     "eslint-import-resolver-webpack": "^0.8.3",
+    "eslint-plugin-prettier": "^2.6.2",
     "flow-bin": "^0.71.0",
     "husky": "^0.14.3",
     "lint-staged": "^4.2.3",
@@ -133,6 +135,7 @@
     "postcss-extend": "^1.0.5",
     "postcss-nested": "^2.1.2",
     "postcss-simple-vars": "^4.1.0",
+    "prettier": "^1.14.2",
     "svg-react-loader": "^0.4.5",
     "webpack-merge": "^4.1.0"
   }
