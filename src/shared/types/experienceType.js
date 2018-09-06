@@ -1,10 +1,5 @@
 // @flow
-import type {
-  Company,
-  Salary,
-  Archive,
-} from './commonType';
-
+import type { Company, Salary, Archive } from './commonType';
 
 export type ExperienceType = {
   _id: string,
@@ -14,6 +9,5 @@ export type ExperienceType = {
   title: string,
   regeion: string,
   archive: Archive,
-  salary: Salary,
+  salary: Salary
 };
-

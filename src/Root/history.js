@@ -1,17 +1,14 @@
 import createHistory from 'history/createBrowserHistory';
 import qhistory from 'qhistory';
 import { parse, stringify } from 'qs';
-import {
-  BASENAME,
-} from '../shared/constants';
+import { BASENAME } from '../shared/constants';
 
 const history = qhistory(
   createHistory({
-    basename: BASENAME,
+    basename: BASENAME
   }),
   stringify,
-  parse,
+  parse
 );
 
 export default history;
-

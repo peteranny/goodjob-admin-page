@@ -75,7 +75,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "precommit": "yarn flow && lint-staged",
+    "precommit": "pretty-quick --staged && yarn flow && lint-staged",
     "lint": "eslint ./",
     "pre-release": "yarn flow && yarn lint",
     "release": "yarn run pre-release && yarn build",
@@ -136,6 +136,7 @@
     "postcss-nested": "^2.1.2",
     "postcss-simple-vars": "^4.1.0",
     "prettier": "^1.14.2",
+    "pretty-quick": "^1.6.0",
     "svg-react-loader": "^0.4.5",
     "webpack-merge": "^4.1.0"
   }

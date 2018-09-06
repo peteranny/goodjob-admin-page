@@ -5,23 +5,24 @@ import { Modal, Input, Checkbox } from 'antd';
 type Props = {
   form: any,
   setFormField: (field: string) => (value: any) => void,
-  displayedFields: Array<string>,
+  displayedFields: Array<string>
 };
 
 const EditModal = (props: Props) => {
   const { form, setFormField, displayedFields } = props;
   return (
     <Modal {...props}>
-      { displayedFields.map(field => (
+      {displayedFields.map(field => (
         <div key={field}>
           <span style={{ fontWeight: 'bold', marginRight: '1em' }}>{field}</span>
           <span>{form[field]}</span>
         </div>
-      )) }
+      ))}
       <hr />
       <Input
         addonBefore={
-          <label> {/* eslint-disable-line jsx-a11y/label-has-for */}
+          /* eslint-disable-next-line jsx-a11y/label-has-for */
+          <label>
             <Checkbox
               checked={form.archive_status}
               onChange={e => setFormField('archive_status')(e.target.checked)}

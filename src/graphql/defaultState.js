@@ -4,19 +4,19 @@ const defaultState = {
     {
       __typename: 'todoItem',
       id: 1,
-      value: 'babel',
+      value: 'babel'
     },
     {
       __typename: 'todoItem',
       id: 2,
-      value: 'eslint',
+      value: 'eslint'
     },
     {
       __typename: 'todoItem',
       id: 3,
-      value: 'graphql',
-    },
-  ],
+      value: 'graphql'
+    }
+  ]
 };
 
 export default defaultState;

@@ -4,12 +4,12 @@ import zhtw from './zhtw.json';
 
 export default {
   'en-US': {
-    default: enus,
+    default: enus
   },
   'zh-CN': {
-    default: zhcn,
+    default: zhcn
   },
   'zh-TW': {
-    default: zhtw,
-  },
+    default: zhtw
+  }
 };

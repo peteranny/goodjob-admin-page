@@ -1,7 +1,7 @@
 // @flow
 import { compose, withHandlers, withState, type HOC } from 'recompose';
 
-type Props = {}
+type Props = {};
 
 const withSearchOption: HOC<*, Props> = compose(
   withState('searchObj', 'setSearchObj', { columnKey: 'COMPANY', value: '' }),
@@ -9,10 +9,10 @@ const withSearchOption: HOC<*, Props> = compose(
     submitSearchObj: ({ setSearchObj }) => (columnKey, submitValue) => {
       setSearchObj({
         columnKey,
-        value: submitValue,
+        value: submitValue
       });
-    },
-  }),
+    }
+  })
 );
 
 export default withSearchOption;

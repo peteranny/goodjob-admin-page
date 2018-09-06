@@ -1,11 +1,6 @@
 // @flow
 import * as React from 'react';
-import {
-  withState,
-  compose,
-  defaultProps,
-  type HOC,
-} from 'recompose';
+import { withState, compose, defaultProps, type HOC } from 'recompose';
 import { graphql } from 'react-apollo';
 
 import { getPokemon } from './pokemon';
@@ -16,21 +11,21 @@ type Props = {};
 type PropsFromHOC = {
   todos: Array<{
     id: number,
-    value: string,
+    value: string
   }>,
   inputText: string,
   setInputText: string => void,
   appendTodo: ({
     variables: {
       id: number,
-      value: string,
-    },
+      value: string
+    }
   }) => void,
   pokemon: {
     id: string,
     number: string,
-    name: string,
-  },
+    name: string
+  }
 };
 
 const handleKeyPress = (callback: any => void) => (e: SyntheticKeyboardEvent<*>) => {
@@ -44,19 +39,13 @@ const GqlExample = ({
   inputText,
   setInputText,
   appendTodo,
-  pokemon,
+  pokemon
 }: Props & PropsFromHOC) => (
   <div>
     <ul>
-      {
-        todos.map(todo => (
-          <li
-            key={todo.id}
-          >
-            {todo.value}
-          </li>
-        ))
-      }
+      {todos.map(todo => (
+        <li key={todo.id}>{todo.value}</li>
+      ))}
     </ul>
     <input
       type="text"
@@ -65,8 +54,8 @@ const GqlExample = ({
         appendTodo({
           variables: {
             id: Math.max(...todos.map(d => d.id)) + 1,
-            value: inputText,
-          },
+            value: inputText
+          }
         });
         setInputText('');
       })}
@@ -74,28 +63,22 @@ const GqlExample = ({
     />
     <hr />
     <h2>Pokemon</h2>
-    <p>
-      id: {pokemon.id}
-    </p>
-    <p>
-      number: {pokemon.number}
-    </p>
-    <p>
-      name: {pokemon.name}
-    </p>
+    <p>id: {pokemon.id}</p>
+    <p>number: {pokemon.number}</p>
+    <p>name: {pokemon.name}</p>
   </div>
 );
 
 const hoc: HOC<*, Props> = compose(
   graphql(getTodos, {
     props: ({ data: { todos } }) => ({
-      todos,
-    }),
+      todos
+    })
   }),
   graphql(getPokemon, {
     props: ({ data: { pokemon } }) => ({
-      pokemon,
-    }),
+      pokemon
+    })
   }),
   graphql(appendTodoGql, { name: 'appendTodo' }),
   withState('inputText', 'setInputText', ''),
@@ -103,9 +86,9 @@ const hoc: HOC<*, Props> = compose(
     pokemon: {
       id: '',
       number: '',
-      name: '',
-    },
-  }),
+      name: ''
+    }
+  })
 );
 
 export default hoc(GqlExample);
