@@ -1,9 +1,5 @@
 // @flow
-import type {
-  Company,
-  Salary,
-  Archive,
-} from './commonType';
+import type { Company, Salary, Archive } from './commonType';
 
 export type Working = {
   _id: string,
@@ -13,5 +9,5 @@ export type Working = {
   salary: Salary,
   weekWorkTime: number,
   estimatedHourlyWage: number,
-  archive: Archive,
-}
+  archive: Archive
+};

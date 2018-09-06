@@ -8,12 +8,12 @@ import { type Column, default as withColumns } from '../../shared/hoc/withColumn
 import {
   withActionColumnAppended,
   withColumnsSearchable,
-  withColumnsSortable,
+  withColumnsSortable
 } from '../../shared/hoc/withColumnsEnhanced';
 
 import EditModal from './EditModal';
 
-type Data = {[string]:any}
+type Data = { [string]: any };
 
 type Props = {
   isLoading: boolean,
@@ -35,8 +35,8 @@ type Props = {
   nData: number,
   page: number,
   pageSize: number,
-  handleTableChange: (pagination: {[string]: any}) => void,
-}
+  handleTableChange: (pagination: { [string]: any }) => void
+};
 
 const FunctionalTable = ({
   isLoading,
@@ -58,7 +58,7 @@ const FunctionalTable = ({
   nData,
   page,
   pageSize,
-  handleTableChange,
+  handleTableChange
 }: Props) => (
   <React.Fragment>
     <EditModal
@@ -73,14 +73,14 @@ const FunctionalTable = ({
     <Table
       rowSelection={{
         selectedRowKeys,
-        onChange: onSelectChange,
+        onChange: onSelectChange
       }}
       dataSource={dataSource}
       columns={columns}
       pagination={{
         total: nData,
         pageSize,
-        current: page,
+        current: page
       }}
       onChange={handleTableChange}
       scroll={{ x: 1300 }}
@@ -92,22 +92,22 @@ const FunctionalTable = ({
 const withSelectedRowKeys = compose(
   withState('selectedRowKeys', 'setSelectedRowKeys', []),
   withHandlers({
-    onSelectChange: ({ setSelectedRowKeys }) => (selectedRowKeys) => {
+    onSelectChange: ({ setSelectedRowKeys }) => selectedRowKeys => {
       setSelectedRowKeys(selectedRowKeys);
-    },
-  }),
+    }
+  })
 );
 
 const withForm = compose(
   withState('form', 'setForm', {}),
   withHandlers({
-    setFormField: ({ form, setForm }) => field => (value) => {
+    setFormField: ({ form, setForm }) => field => value => {
       setForm({
         ...form,
-        [field]: value,
+        [field]: value
       });
-    },
-  }),
+    }
+  })
 );
 
 const withEditModal = compose(
@@ -119,8 +119,8 @@ const withEditModal = compose(
     },
     handleCancel: ({ setEditModalVisible }) => () => {
       setEditModalVisible(false);
-    },
-  }),
+    }
+  })
 );
 
 const enhance = compose(
@@ -130,7 +130,7 @@ const enhance = compose(
   withColumns,
   withColumnsSearchable,
   withColumnsSortable,
-  withActionColumnAppended,
+  withActionColumnAppended
 );
 
 export default enhance(FunctionalTable);

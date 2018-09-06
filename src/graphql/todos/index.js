@@ -6,7 +6,7 @@ export const getTodos = gql`
     todos @client {
       id
       value
-    },
+    }
   }
 `;
 

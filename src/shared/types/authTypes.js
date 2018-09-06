@@ -9,7 +9,7 @@ export type Profile = {
   createTime: number,
   expireTime: null | number,
   nickname: string,
-  email: string,
+  email: string
 };
 
 export type Token = string;

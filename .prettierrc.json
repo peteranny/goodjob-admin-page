@@ -1,4 +1,14 @@
 {
   "singleQuote": true,
-  "printWidth": 100
+  "printWidth": 100,
+  "parser": "flow",
+  "filepath": "./src/**/*",
+  "overrides": [
+    {
+      "files": ".prettierrc.json",
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
 }

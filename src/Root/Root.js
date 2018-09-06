@@ -2,9 +2,7 @@
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { I18nextProvider } from 'react-i18next';
-import {
-  Router,
-} from 'react-router-dom';
+import { Router } from 'react-router-dom';
 
 import i18nInstance from './i18next';
 
