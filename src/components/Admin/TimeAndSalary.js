@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo';
 
 import { withProps, compose, type HOC } from 'recompose';
 
-import { getTimeSalaryQL } from '../../graphql/TimeAndSalary/';
+import { getTimeSalaryQL, updateTimeSalaryQL } from '../../graphql/TimeAndSalary/';
 import type { ExperienceType } from '../../shared/types/experienceType';
 
 import AdminLayout from './AdminLayout';
@@ -52,8 +52,20 @@ const COLUMNS = [
     sortable: true,
     filterVisible: false
   },
-  { title: '封存狀態', dataIndex: 'archive_status', key: 'archive_status', filterVisible: false },
-  { title: '封存理由', dataIndex: 'archive_reason', key: 'archive_reason', filterVisible: false }
+  {
+    title: '封存狀態',
+    dataIndex: 'archive_status',
+    key: 'archive_status',
+    filterVisible: false,
+    render: isArchived => (isArchived ? '已封存' : '')
+  },
+  {
+    title: '封存理由',
+    dataIndex: 'archive_reason',
+    key: 'archive_reason',
+    filterVisible: false,
+    render: (reason, record) => (record.archive_status ? reason : '')
+  }
 ];
 
 type Props = {
@@ -129,8 +141,8 @@ const withGraphqlData: HOC<*, Props> = compose(
       company: data.company.name,
       salary_type: data.salary.type,
       salary_amount: data.salary.amount,
-      archive_status: data.archive && data.archive.is_archived,
-      archive_reason: data.archive && data.archive.reason ? data.archive.reason : null
+      archive_status: !!(data.archive && data.archive.is_archived),
+      archive_reason: data.archive && data.archive.reason ? data.archive.reason : ''
     }));
     const nData = workings ? workings.total : 0;
 
@@ -142,10 +154,32 @@ const withGraphqlData: HOC<*, Props> = compose(
   })
 );
 
+const withGraphqlMutation: HOC<*, Props> = compose(
+  graphql(updateTimeSalaryQL),
+  withProps(({ mutate }) => ({
+    updateArchive: async (_id, isArchived, reason = '') => {
+      await mutate({
+        variables: {
+          mutationExp: {
+            workings: {
+              _id,
+              archive: {
+                is_archived: isArchived,
+                reason
+              }
+            }
+          }
+        }
+      });
+    }
+  }))
+);
+
 const hoc = compose(
   withSearchOption,
   withPagination,
-  withGraphqlData
+  withGraphqlData,
+  withGraphqlMutation
 );
 
 export default hoc(TimeAndSalary);

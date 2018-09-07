@@ -113,9 +113,17 @@ const withForm = compose(
 const withEditModal = compose(
   withState('isEditModalVisible', 'setEditModalVisible', false),
   withHandlers({
-    handleOk: ({ form, setEditModalVisible }) => () => {
-      console.info(form);
-      setEditModalVisible(false);
+    handleOk: ({ updateArchive, form, setEditModalVisible }) => async () => {
+      try {
+        await updateArchive(
+          form._id,
+          form.archive_status,
+          form.archive_status ? form.archive_reason : ''
+        );
+        setEditModalVisible(false);
+      } catch (error) {
+        console.error(error);
+      }
     },
     handleCancel: ({ setEditModalVisible }) => () => {
       setEditModalVisible(false);

@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo';
 
 import { withProps, compose, type HOC } from 'recompose';
 
-import { getInterviewExpQL } from '../../graphql/InterviewExperience/';
+import { getInterviewExpQL, updateInterviewExpQL } from '../../graphql/InterviewExperience/';
 import type { ExperienceType } from '../../shared/types/experienceType';
 
 import AdminLayout from './AdminLayout';
@@ -32,8 +32,20 @@ const COLUMNS = [
   },
   { title: '標題', dataIndex: 'title', key: 'title', filterVisible: false },
   { title: '地區', dataIndex: 'region', key: 'region', filterVisible: false },
-  { title: '封存狀態', dataIndex: 'archive_status', key: 'archive_status', filterVisible: false },
-  { title: '封存理由', dataIndex: 'archive_reason', key: 'archive_reason', filterVisible: false }
+  {
+    title: '封存狀態',
+    dataIndex: 'archive_status',
+    key: 'archive_status',
+    filterVisible: false,
+    render: isArchived => (isArchived ? '已封存' : '')
+  },
+  {
+    title: '封存理由',
+    dataIndex: 'archive_reason',
+    key: 'archive_reason',
+    filterVisible: false,
+    render: (reason, record) => (record.archive_status ? reason : '')
+  }
 ];
 
 type Props = {
@@ -101,8 +113,8 @@ const withGraphqlData: HOC<*, Props> = compose(
       id: data._id,
       key: data._id,
       company: data.company.name,
-      archive_status: data.archive && data.archive.is_archived,
-      archive_reason: data.archive && data.archive.reason ? data.archive.reason : null
+      archive_status: !!(data.archive && data.archive.is_archived),
+      archive_reason: data.archive && data.archive.reason ? data.archive.reason : ''
     }));
     const nData = interview_experiences ? interview_experiences.total : 0;
 
@@ -114,10 +126,32 @@ const withGraphqlData: HOC<*, Props> = compose(
   })
 );
 
+const withGraphqlMutation: HOC<*, Props> = compose(
+  graphql(updateInterviewExpQL),
+  withProps(({ mutate }) => ({
+    updateArchive: async (_id, isArchived, reason = '') => {
+      await mutate({
+        variables: {
+          mutationExp: {
+            experiences: {
+              _id,
+              archive: {
+                is_archived: isArchived,
+                reason
+              }
+            }
+          }
+        }
+      });
+    }
+  }))
+);
+
 const hoc = compose(
   withSearchOption,
   withPagination,
-  withGraphqlData
+  withGraphqlData,
+  withGraphqlMutation
 );
 
 export default hoc(Interview);

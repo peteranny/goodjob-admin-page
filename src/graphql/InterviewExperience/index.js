@@ -22,3 +22,17 @@ export const getInterviewExpQL = gql`
     }
   }
 `;
+
+export const updateInterviewExpQL = gql`
+  mutation UpdateExperiencesQL($mutationExp: UpdateExperiencesInput!) {
+    update_experiences(input: $mutationExp) {
+      experiences {
+        _id
+        archive {
+          is_archived
+          reason
+        }
+      }
+    }
+  }
+`;
