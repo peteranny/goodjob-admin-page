@@ -1,26 +1,26 @@
 // @flow
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { withRouter, type Location, type RouterHistory } from 'react-router';
+import { withRouter, type Location } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const { Sider } = Layout;
 
 type Prop = {
-  history: RouterHistory,
   location: Location
 };
 
-const Sidebar = ({ history: { push }, location: { pathname } }: Prop) => (
+const Sidebar = ({ location: { pathname } }: Prop) => (
   <Sider width={100} style={{ background: '#fff' }}>
     <Menu selectedKeys={[pathname]} mode="inline" style={{ height: '100%', borderRight: 0 }}>
-      <Menu.Item key="/time-and-salary" onClick={() => push('time-and-salary')}>
-        工時薪資
+      <Menu.Item key="/time-and-salary">
+        <Link to="/time-and-salary">工時薪資</Link>
       </Menu.Item>
-      <Menu.Item key="/work-experience" onClick={() => push('work-experience')}>
-        工作經驗
+      <Menu.Item key="/work-experience">
+        <Link to="/work-experience">工作經驗</Link>
       </Menu.Item>
-      <Menu.Item key="/interview" onClick={() => push('interview')}>
-        面試經驗
+      <Menu.Item key="/interview">
+        <Link to="/interview">面試經驗</Link>
       </Menu.Item>
     </Menu>
   </Sider>
