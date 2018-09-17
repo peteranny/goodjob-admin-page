@@ -21,7 +21,8 @@ const stateLink = withClientState({
 const uri = `${REACT_APP_API_HOST}/graphql`;
 
 const httpLink = new HttpLink({
-  uri
+  uri,
+  credentials: 'include'
 });
 
 const client = new ApolloClient({
