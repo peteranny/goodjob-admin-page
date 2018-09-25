@@ -6,15 +6,15 @@ import App from '../components/app';
 import WorkExperience from '../components/Admin/WorkExperience';
 import TimeAndSalary from '../components/Admin/TimeAndSalary';
 import Interview from '../components/Admin/Interview';
-import GqlExample from '../components/GqlExample';
+import LoginPage from '../components/LoginPage';
 
 const AppRoute: () => React.Node = () => (
   <App>
     <Switch>
+      <Route exact path="/" component={LoginPage} />
       <Route exact path="/time-and-salary" component={TimeAndSalary} />
       <Route exact path="/work-experience" component={WorkExperience} />
       <Route exact path="/interview" component={Interview} />
-      <Route exact path="/gql-example" component={GqlExample} />
       <Redirect to="/time-and-salary" />
     </Switch>
   </App>
