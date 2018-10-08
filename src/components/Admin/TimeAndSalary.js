@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { graphql } from 'react-apollo';
+import { Tag } from 'antd';
 
 import { withProps, compose, type HOC } from 'recompose';
 
@@ -30,7 +31,13 @@ const COLUMNS = [
     showSearchValue: '',
     filterVisible: false
   },
-  { title: '薪資種類', dataIndex: 'salary_type', key: 'salary_type', filterVisible: false },
+  {
+    title: '薪資種類',
+    dataIndex: 'salary_type',
+    key: 'salary_type',
+    filterVisible: false,
+    render: text => <Tag>{text}</Tag>
+  },
   {
     title: '薪資金額',
     dataIndex: 'salary_amount',
@@ -57,7 +64,7 @@ const COLUMNS = [
     dataIndex: 'archive_status',
     key: 'archive_status',
     filterVisible: false,
-    render: isArchived => (isArchived ? '已封存' : '')
+    render: isArchived => (isArchived ? <Tag color="red">已封存</Tag> : '')
   },
   {
     title: '封存理由',

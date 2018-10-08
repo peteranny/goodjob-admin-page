@@ -13,6 +13,8 @@ import {
 
 import EditModal from './EditModal';
 
+import './FunctionalTable.css';
+
 type Data = { [string]: any };
 
 type Props = {
@@ -83,7 +85,7 @@ const FunctionalTable = ({
         current: page
       }}
       onChange={handleTableChange}
-      scroll={{ x: 1300 }}
+      scroll={{ x: columns.map(() => 200).reduce((a, b) => a + b, 0) }}
       loading={isLoading}
     />
   </React.Fragment>

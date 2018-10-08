@@ -64,20 +64,7 @@ const withColumns: HOC<*, Props> = compose(
   lifecycle({
     componentDidMount() {
       const { _columns, setColumns } = this.props;
-
-      const columnWithWidthSetting = {
-        id: '250px',
-        company: '200px'
-      };
-      const _columnsWithWidth = _columns.map(column => {
-        if (column.key in columnWithWidthSetting) {
-          return Object.assign({}, column, { width: columnWithWidthSetting[column.key] });
-        }
-
-        return column;
-      });
-
-      setColumns(_columnsWithWidth);
+      setColumns(_columns);
     }
   })
 );

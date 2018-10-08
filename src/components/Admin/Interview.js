@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { graphql } from 'react-apollo';
+import { Tag } from 'antd';
 
 import { withProps, compose, type HOC } from 'recompose';
 
@@ -13,7 +14,12 @@ import withPagination from '../../shared/hoc/withPagination';
 import withSearchOption from '../../shared/hoc/withSearchOption';
 
 const COLUMNS = [
-  { title: 'ID', dataIndex: 'id', key: 'id', filterVisible: false, width: '150px' },
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id',
+    filterVisible: false
+  },
   {
     title: '公司',
     dataIndex: 'company',
@@ -37,7 +43,7 @@ const COLUMNS = [
     dataIndex: 'archive_status',
     key: 'archive_status',
     filterVisible: false,
-    render: isArchived => (isArchived ? '已封存' : '')
+    render: isArchived => (isArchived ? <Tag color="red">已封存</Tag> : '')
   },
   {
     title: '封存理由',
