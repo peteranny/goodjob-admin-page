@@ -14,7 +14,7 @@ const LoginPage = () => (
         justifyContent: 'center'
       }}
     >
-      <a href={`${REACT_APP_API_HOST}/auth/facebook/callback`}>
+      <a href={`${REACT_APP_API_HOST}/auth/facebook`}>
         <Icon
           style={{
             fontSize: '10rem'
