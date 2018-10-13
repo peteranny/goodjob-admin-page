@@ -18,6 +18,11 @@ export const getInterviewExpQL = gql`
           is_archived
           reason
         }
+        sections {
+          id
+          subtitle
+          content
+        }
       }
     }
   }

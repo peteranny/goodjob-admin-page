@@ -18,6 +18,11 @@ export const getWorkExpQL = gql`
           is_archived
           reason
         }
+        sections {
+          id
+          subtitle
+          content
+        }
       }
     }
   }

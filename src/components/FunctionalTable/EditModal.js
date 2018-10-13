@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal, Radio, Input, Checkbox, List } from 'antd';
+import { propOr } from 'ramda';
 
 const { Item: ListItem } = List;
 const { Meta: ListItemMeta } = ListItem;
@@ -104,6 +105,20 @@ const EditModal = (props: Props) => {
         {displayedFields.map(field => (
           <ListItem key={field}>
             <ListItemMeta title={humanize(field)} description={form[field] || '(無)'} />
+          </ListItem>
+        ))}
+        {form.sections && (
+          <h2
+            style={{
+              marginTop: '20px'
+            }}
+          >
+            經驗
+          </h2>
+        )}
+        {propOr([], 'sections')(form).map(({ subtitle, content, id }) => (
+          <ListItem key={id}>
+            <ListItemMeta title={subtitle} description={content} />
           </ListItem>
         ))}
       </List>
