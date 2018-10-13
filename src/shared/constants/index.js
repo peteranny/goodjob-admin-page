@@ -15,7 +15,8 @@ export const FETCH_STATUS_MAP: {
 
 export const TOKEN_KEY: string = 'VISION_API_TOKEN_KEY';
 
-export const LOGIN_STATUS = {
+export type LoginStatus = 'NOT_LOGIN' | 'LOGIN_SUCCESS' | 'LOGIN_FAIL';
+export const LOGIN_STATUS: { [key: string]: LoginStatus } = {
   NOT_LOGIN: 'NOT_LOGIN',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAIL: 'LOGIN_FAIL'

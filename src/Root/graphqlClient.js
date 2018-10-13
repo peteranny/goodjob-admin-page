@@ -5,6 +5,7 @@ import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import { ApolloClient } from 'apollo-client';
 
+import errorLink from './errorLink';
 import defaults from '../graphql/defaultState';
 import resolvers from '../graphql/resolvers';
 
@@ -27,7 +28,7 @@ const httpLink = new HttpLink({
 
 const client = new ApolloClient({
   cache,
-  link: ApolloLink.from([stateLink, httpLink])
+  link: ApolloLink.from([errorLink, stateLink, httpLink])
 });
 
 export default client;

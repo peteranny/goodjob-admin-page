@@ -6,12 +6,10 @@ import App from '../components/app';
 import WorkExperience from '../components/Admin/WorkExperience';
 import TimeAndSalary from '../components/Admin/TimeAndSalary';
 import Interview from '../components/Admin/Interview';
-import LoginPage from '../components/LoginPage';
 
-const AppRoute: () => React.Node = () => (
+const AppRoute = () => (
   <App>
     <Switch>
-      <Route exact path="/" component={LoginPage} />
       <Route exact path="/time-and-salary" component={TimeAndSalary} />
       <Route exact path="/work-experience" component={WorkExperience} />
       <Route exact path="/interview" component={Interview} />
