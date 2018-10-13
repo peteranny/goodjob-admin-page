@@ -42,6 +42,33 @@ jobs:
                         # push
                         docker push "${REGISTRY}:stage"
                     fi
+    build_production_docker:
+        working_directory: ~/app
+        docker:
+            - image: alpine
+        environment:
+            REGISTRY: "registry.gitlab.com/goodjoblife/i/goodjob-admin-page"
+        steps:
+            - checkout
+            - run:
+                name: Install Docker client & Docker Compose
+                command: |
+                    apk add --update docker py-pip
+                    pip install docker-compose
+            - setup_remote_docker
+            - run:
+                name: Login docker registry
+                command: docker login registry.gitlab.com -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASS}
+            - run:
+                name: Build Docker and Push
+                command: |
+                    if [ "${CIRCLE_PROJECT_USERNAME}" == "goodjoblife" ]; then
+                        # build
+                        docker-compose -f .circleci/docker-compose-production.yml build
+                        docker tag "goodjob-admin-page:production" "${REGISTRY}:production-${CIRCLE_SHA1}"
+                        # push
+                        docker push "${REGISTRY}:production-${CIRCLE_SHA1}"
+                    fi
     deploy_stage:
         working_directory: ~/app
         docker:
@@ -62,6 +89,10 @@ workflows:
         jobs:
             - build
             - build_stage_docker:
+                filters:
+                    branches:
+                        only: master
+            - build_production_docker:
                 filters:
                     branches:
                         only: master
