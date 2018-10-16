@@ -1,7 +1,7 @@
-// FIXME: use flow
+// @flow
 import React from 'react';
 import { Layout } from 'antd';
-import { withRouter, type Location } from 'react-router';
+import { withRouter, type Location } from 'react-router-dom';
 import { type HOC, compose } from 'recompose';
 
 import styles from './LoginPage.m.css';
