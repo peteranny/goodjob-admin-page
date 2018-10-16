@@ -11,7 +11,7 @@ import type { ExperienceType } from '../../shared/types/experienceType';
 import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
 import withPagination from '../../shared/hoc/withPagination';
-import withSearchOption from '../../shared/hoc/withSearchOption';
+import withSearchOptionFromRoute from '../../shared/hoc/withSearchOptionFromRoute';
 
 const COLUMNS = [
   { title: 'ID', dataIndex: 'id', key: 'id', filterVisible: false },
@@ -183,7 +183,7 @@ const withGraphqlMutation: HOC<*, Props> = compose(
 );
 
 const hoc = compose(
-  withSearchOption,
+  withSearchOptionFromRoute,
   withPagination,
   withGraphqlData,
   withGraphqlMutation
