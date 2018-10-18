@@ -18,6 +18,8 @@ const COLUMNS = [
     title: 'ID',
     dataIndex: 'id',
     key: 'id',
+    searchable: true,
+    showSearchValue: '',
     filterVisible: false
   },
   {

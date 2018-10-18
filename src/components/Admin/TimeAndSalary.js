@@ -14,7 +14,14 @@ import withPagination from '../../shared/hoc/withPagination';
 import withSearchOptionFromRoute from '../../shared/hoc/withSearchOptionFromRoute';
 
 const COLUMNS = [
-  { title: 'ID', dataIndex: 'id', key: 'id', filterVisible: false },
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id',
+    searchable: true,
+    showSearchValue: '',
+    filterVisible: false
+  },
   {
     title: '公司',
     dataIndex: 'company',
