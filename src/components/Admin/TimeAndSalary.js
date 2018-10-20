@@ -153,8 +153,8 @@ const withGraphqlData: HOC<*, Props> = compose(
       id: data._id,
       key: data._id,
       company: data.company.name,
-      salary_type: data.salary.type,
-      salary_amount: data.salary.amount,
+      salary_type: data.salary && data.salary.type,
+      salary_amount: data.salary && data.salary.amount,
       archive_status: !!(data.archive && data.archive.is_archived),
       archive_reason: data.archive && data.archive.reason ? data.archive.reason : ''
     }));
