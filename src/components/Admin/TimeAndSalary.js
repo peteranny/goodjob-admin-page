@@ -45,10 +45,11 @@ const COLUMNS = [
     sortable: true
   },
   {
-    title: '實際平均工時',
+    title: '估計時薪',
     dataIndex: 'estimated_hourly_wage',
     key: 'estimated_hourly_wage',
-    sortable: true
+    sortable: true,
+    render: value => (typeof value === 'number' ? parseInt(value, 10) : value)
   },
   {
     title: '一週總工時',
