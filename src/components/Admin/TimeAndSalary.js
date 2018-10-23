@@ -18,66 +18,54 @@ const COLUMNS = [
     title: 'ID',
     dataIndex: 'id',
     key: 'id',
-    searchable: true,
-    showSearchValue: '',
-    filterVisible: false
+    searchable: true
   },
   {
     title: '公司',
     dataIndex: 'company',
     key: 'company',
-    searchable: true,
-    showSearchValue: '',
-    filterVisible: false
+    searchable: true
   },
   {
     title: '職稱',
     dataIndex: 'job_title',
     key: 'job_title',
-    searchable: true,
-    showSearchValue: '',
-    filterVisible: false
+    searchable: true
   },
   {
     title: '薪資種類',
     dataIndex: 'salary_type',
     key: 'salary_type',
-    filterVisible: false,
     render: text => <Tag>{text}</Tag>
   },
   {
     title: '薪資金額',
     dataIndex: 'salary_amount',
     key: 'salary_amount',
-    sortable: true,
-    filterVisible: false
+    sortable: true
   },
   {
     title: '實際平均工時',
     dataIndex: 'estimated_hourly_wage',
     key: 'estimated_hourly_wage',
-    sortable: true,
-    filterVisible: false
+    sortable: true
   },
   {
     title: '一週總工時',
     dataIndex: 'week_work_time',
     key: 'week_work_time',
-    sortable: true,
-    filterVisible: false
+    sortable: true
   },
   {
     title: '封存狀態',
     dataIndex: 'archive_status',
     key: 'archive_status',
-    filterVisible: false,
     render: isArchived => (isArchived ? <Tag color="red">已封存</Tag> : '')
   },
   {
     title: '封存理由',
     dataIndex: 'archive_reason',
     key: 'archive_reason',
-    filterVisible: false,
     render: (reason, record) => (record.archive_status ? reason : '')
   }
 ];

@@ -18,40 +18,32 @@ const COLUMNS = [
     title: 'ID',
     dataIndex: 'id',
     key: 'id',
-    searchable: true,
-    showSearchValue: '',
-    filterVisible: false
+    searchable: true
   },
   {
     title: '公司',
     dataIndex: 'company',
     key: 'company',
-    searchable: true,
-    showSearchValue: '',
-    filterVisible: false
+    searchable: true
   },
   {
     title: '職稱',
     dataIndex: 'job_title',
     key: 'job_title',
-    searchable: true,
-    showSearchValue: '',
-    filterVisible: false
+    searchable: true
   },
-  { title: '標題', dataIndex: 'title', key: 'title', filterVisible: false },
-  { title: '地區', dataIndex: 'region', key: 'region', filterVisible: false },
+  { title: '標題', dataIndex: 'title', key: 'title' },
+  { title: '地區', dataIndex: 'region', key: 'region' },
   {
     title: '封存狀態',
     dataIndex: 'archive_status',
     key: 'archive_status',
-    filterVisible: false,
     render: isArchived => (isArchived ? <Tag color="red">已封存</Tag> : '')
   },
   {
     title: '封存理由',
     dataIndex: 'archive_reason',
     key: 'archive_reason',
-    filterVisible: false,
     render: (reason, record) => (record.archive_status ? reason : '')
   }
 ];

@@ -3,9 +3,8 @@ import React from 'react';
 import { Table } from 'antd';
 import { compose, withState, withHandlers } from 'recompose';
 
-// eslint-disable-next-line import/no-named-default
-import { type Column, default as withColumns } from '../../shared/hoc/withColumns';
 import {
+  type Column,
   withActionColumnAppended,
   withColumnsSearchable,
   withColumnsSortable
@@ -137,7 +136,6 @@ const enhance = compose(
   withSelectedRowKeys,
   withForm,
   withEditModal,
-  withColumns,
   withColumnsSearchable,
   withColumnsSortable,
   withActionColumnAppended
