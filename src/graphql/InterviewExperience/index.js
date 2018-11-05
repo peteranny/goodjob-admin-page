@@ -23,6 +23,7 @@ export const getInterviewExpQL = gql`
           subtitle
           content
         }
+        created_at
       }
     }
   }

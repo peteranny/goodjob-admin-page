@@ -23,6 +23,7 @@ export const getWorkExpQL = gql`
           subtitle
           content
         }
+        created_at
       }
     }
   }

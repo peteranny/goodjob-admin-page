@@ -21,6 +21,7 @@ export const getTimeSalaryQL = gql`
           is_archived
           reason
         }
+        created_at
       }
     }
   }
