@@ -12,6 +12,7 @@ import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
 import withPagination from '../../shared/hoc/withPagination';
 import withSearchOptionFromRoute from '../../shared/hoc/withSearchOptionFromRoute';
+import { ORDER_BY } from '../../shared/constants';
 
 const COLUMNS = [
   {
@@ -130,7 +131,11 @@ const withGraphqlData: HOC<*, Props> = compose(
               by: columnKey.toUpperCase()
             },
             start: (page - 1) * pageSize,
-            limit: pageSize
+            limit: pageSize,
+            sort: {
+              sort_field: 'CREATED_AT',
+              order_by: ORDER_BY.ASCENDING
+            }
           }
         }
       };

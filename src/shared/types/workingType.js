@@ -9,5 +9,6 @@ export type Working = {
   salary: Salary,
   weekWorkTime: number,
   estimatedHourlyWage: number,
-  archive: Archive
+  archive: Archive,
+  created_type: string
 };
