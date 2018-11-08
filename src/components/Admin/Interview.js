@@ -12,6 +12,7 @@ import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
 import withPagination from '../../shared/hoc/withPagination';
 import withSearchOptionFromRoute from '../../shared/hoc/withSearchOptionFromRoute';
+import withSortOptionFromRoute from '../../shared/hoc/withSortOptionFromRoute';
 import { ORDER_BY } from '../../shared/constants';
 
 const COLUMNS = [
@@ -154,6 +155,7 @@ const withGraphqlMutation: HOC<*, Props> = compose(
 );
 
 const hoc = compose(
+  withSortOptionFromRoute,
   withSearchOptionFromRoute,
   withPagination,
   withGraphqlData,
