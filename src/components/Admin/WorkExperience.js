@@ -16,7 +16,7 @@ import withSearchOptionFromRoute from '../../shared/hoc/withSearchOptionFromRout
 import withSortOptionFromRoute from '../../shared/hoc/withSortOptionFromRoute';
 import withHandleTableChange from '../../shared/hoc/withHandleTableChange';
 
-import { ORDER_BY } from '../../shared/constants';
+import { type OrderBy } from '../../shared/constants';
 
 const COLUMNS = [
   {
@@ -29,7 +29,8 @@ const COLUMNS = [
     title: '創建時間',
     dataIndex: 'created_at',
     key: 'created_at',
-    render: createdAt => moment(createdAt).format('LLLL')
+    render: createdAt => moment(createdAt).format('LLLL'),
+    sorter: true
   },
   {
     title: '公司',
@@ -62,10 +63,13 @@ const COLUMNS = [
 type Props = {
   page: number,
   pageSize: number,
-
   searchObj: {
     columnKey: string,
     value: string
+  },
+  sortObj: {
+    sortField: string,
+    orderBy: OrderBy
   },
   setSearchObj: ({
     columnKey: string,
@@ -100,6 +104,7 @@ const withGraphqlData: HOC<*, Props> = compose(
     options: props => {
       const {
         searchObj: { columnKey, value },
+        sortObj: { sortField, orderBy },
         page,
         pageSize
       } = props;
@@ -114,8 +119,8 @@ const withGraphqlData: HOC<*, Props> = compose(
             start: (page - 1) * pageSize,
             limit: pageSize,
             sort: {
-              sort_field: 'CREATED_AT',
-              order_by: ORDER_BY.ASCENDING
+              sort_field: sortField,
+              order_by: orderBy
             }
           }
         }
