@@ -20,6 +20,7 @@ const COLUMNS = [
     key: 'id',
     searchable: true
   },
+  { title: '創建時間', dataIndex: 'created_at', key: 'created_at' },
   {
     title: '公司',
     dataIndex: 'company',
