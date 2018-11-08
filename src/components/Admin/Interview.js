@@ -14,6 +14,7 @@ import FunctionalTable from '../FunctionalTable';
 import withPagination from '../../shared/hoc/withPagination';
 import withSearchOptionFromRoute from '../../shared/hoc/withSearchOptionFromRoute';
 import withSortOptionFromRoute from '../../shared/hoc/withSortOptionFromRoute';
+import withHandleTableChange from '../../shared/hoc/withHandleTableChange';
 import { ORDER_BY } from '../../shared/constants';
 
 const COLUMNS = [
@@ -165,7 +166,8 @@ const hoc = compose(
   withSearchOptionFromRoute,
   withPagination,
   withGraphqlData,
-  withGraphqlMutation
+  withGraphqlMutation,
+  withHandleTableChange
 );
 
 export default hoc(Interview);
