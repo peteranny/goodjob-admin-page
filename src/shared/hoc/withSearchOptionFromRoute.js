@@ -2,7 +2,6 @@
 import { compose, withHandlers, withProps, type HOC } from 'recompose';
 import { withRouter, type Location, type RouterHistory } from 'react-router-dom';
 
-import * as R from 'ramda';
 import qs from 'qs';
 
 type Props = {
@@ -10,21 +9,10 @@ type Props = {
   history: RouterHistory
 };
 
-const locationToQuery = R.compose(
-  qs.parse,
-  search => {
-    if (search[0] === '?') {
-      return R.tail(search);
-    }
-    return search;
-  },
-  R.prop('search')
-);
-
 const withSearchOptionFromRoute: HOC<*, Props> = compose(
   withRouter,
-  withProps(({ location }) => {
-    let { columnKey, value } = locationToQuery(location);
+  withProps(({ location: { query } }) => {
+    let { columnKey, value } = query;
     if (typeof columnKey === 'undefined' || columnKey === '') {
       columnKey = 'COMPANY';
     }
@@ -34,10 +22,10 @@ const withSearchOptionFromRoute: HOC<*, Props> = compose(
     return { searchObj: { columnKey, value } };
   }),
   withHandlers({
-    submitSearchObj: ({ history, location }) => (columnKey, submitValue) => {
+    submitSearchObj: ({ history, location: { query } }) => (columnKey, submitValue) => {
       history.push({
         search: qs.stringify({
-          ...locationToQuery(location),
+          ...query,
           columnKey,
           value: submitValue
         })
