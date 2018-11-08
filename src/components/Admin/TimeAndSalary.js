@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo';
 import { Tag } from 'antd';
 
 import { withProps, compose, type HOC } from 'recompose';
+import moment from 'moment';
 
 import { getTimeSalaryQL, updateTimeSalaryQL } from '../../graphql/TimeAndSalary/';
 import type { ExperienceType } from '../../shared/types/experienceType';
@@ -22,7 +23,12 @@ const COLUMNS = [
     key: 'id',
     searchable: true
   },
-  { title: '創建時間', dataIndex: 'created_at', key: 'created_at' },
+  {
+    title: '創建時間',
+    dataIndex: 'created_at',
+    key: 'created_at',
+    render: createdAt => moment(createdAt).format('LLLL')
+  },
   {
     title: '公司',
     dataIndex: 'company',
