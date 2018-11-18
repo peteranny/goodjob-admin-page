@@ -10,7 +10,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, response })
     graphQLErrors.map(({ message, locations, path }) =>
       console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
     );
-    // ignore graphql errors w(though type is invalid, but render anyway )
+    // ignore graphql errors (though type is invalid, but render anyway )
     response.errors = null;
   }
 

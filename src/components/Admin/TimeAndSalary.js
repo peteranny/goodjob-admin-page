@@ -53,21 +53,18 @@ const COLUMNS = [
   {
     title: '薪資金額',
     dataIndex: 'salary_amount',
-    key: 'salary_amount',
-    sortable: true
+    key: 'salary_amount'
   },
   {
     title: '估計時薪',
     dataIndex: 'estimated_hourly_wage',
     key: 'estimated_hourly_wage',
-    sortable: true,
     render: value => (typeof value === 'number' ? parseInt(value, 10) : value)
   },
   {
     title: '一週總工時',
     dataIndex: 'week_work_time',
-    key: 'week_work_time',
-    sortable: true
+    key: 'week_work_time'
   },
   {
     title: '封存狀態',
