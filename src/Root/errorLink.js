@@ -5,11 +5,14 @@ import { getLoginStatusGQL } from '../graphql/loginStatus';
 
 import { LOGIN_STATUS } from '../shared/constants';
 
-const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
-  if (graphQLErrors)
+const errorLink = onError(({ graphQLErrors, networkError, operation, response }) => {
+  if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path }) =>
       console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
     );
+    // ignore graphql errors (though type is invalid, but render anyway )
+    response.errors = null;
+  }
 
   if (networkError) {
     const { cache } = operation.getContext();

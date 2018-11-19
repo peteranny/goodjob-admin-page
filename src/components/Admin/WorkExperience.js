@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo';
 import { Tag } from 'antd';
 
 import { withProps, compose, type HOC } from 'recompose';
+import moment from 'moment';
 
 import { getWorkExpQL, updateWorkExpQL } from '../../graphql/WorkExperience/';
 import type { ExperienceType } from '../../shared/types/experienceType';
@@ -12,6 +13,10 @@ import AdminLayout from './AdminLayout';
 import FunctionalTable from '../FunctionalTable';
 import withPagination from '../../shared/hoc/withPagination';
 import withSearchOptionFromRoute from '../../shared/hoc/withSearchOptionFromRoute';
+import withSortOptionFromRoute from '../../shared/hoc/withSortOptionFromRoute';
+import withHandleTableChange from '../../shared/hoc/withHandleTableChange';
+
+import { type OrderBy } from '../../shared/constants';
 
 const COLUMNS = [
   {
@@ -19,6 +24,13 @@ const COLUMNS = [
     dataIndex: 'id',
     key: 'id',
     searchable: true
+  },
+  {
+    title: '創建時間',
+    dataIndex: 'created_at',
+    key: 'created_at',
+    render: createdAt => moment(createdAt).format('LLLL'),
+    sorter: true
   },
   {
     title: '公司',
@@ -51,10 +63,13 @@ const COLUMNS = [
 type Props = {
   page: number,
   pageSize: number,
-
   searchObj: {
     columnKey: string,
     value: string
+  },
+  sortObj: {
+    sortField: string,
+    orderBy: OrderBy
   },
   setSearchObj: ({
     columnKey: string,
@@ -89,6 +104,7 @@ const withGraphqlData: HOC<*, Props> = compose(
     options: props => {
       const {
         searchObj: { columnKey, value },
+        sortObj: { sortField, orderBy },
         page,
         pageSize
       } = props;
@@ -101,7 +117,11 @@ const withGraphqlData: HOC<*, Props> = compose(
               by: columnKey.toUpperCase()
             },
             start: (page - 1) * pageSize,
-            limit: pageSize
+            limit: pageSize,
+            sort: {
+              sort_field: sortField,
+              order_by: orderBy
+            }
           }
         }
       };
@@ -149,10 +169,12 @@ const withGraphqlMutation: HOC<*, Props> = compose(
 );
 
 const hoc = compose(
+  withSortOptionFromRoute,
   withSearchOptionFromRoute,
   withPagination,
   withGraphqlData,
-  withGraphqlMutation
+  withGraphqlMutation,
+  withHandleTableChange
 );
 
 export default hoc(WorkExperience);

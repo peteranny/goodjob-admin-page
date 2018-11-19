@@ -21,3 +21,9 @@ export const LOGIN_STATUS: { [key: string]: LoginStatus } = {
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAIL: 'LOGIN_FAIL'
 };
+
+export type OrderBy = 'ASCENDING' | 'DESCENDING';
+export const ORDER_BY: { [key: OrderBy]: OrderBy } = {
+  ASCENDING: 'ASCENDING',
+  DESCENDING: 'DESCENDING'
+};

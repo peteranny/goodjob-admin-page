@@ -9,5 +9,6 @@ export type ExperienceType = {
   title: string,
   regeion: string,
   archive: Archive,
-  salary: Salary
+  salary: Salary,
+  created_type: string
 };

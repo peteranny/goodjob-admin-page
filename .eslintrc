@@ -41,7 +41,17 @@
     "react/require-default-props": "off",
     "flowtype/define-flow-type": 1,
     "flowtype/use-flow-type": 1,
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "warn",
+          "error",
+          "info"
+        ]
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

@@ -10,4 +10,4 @@ app.use(express.static(appBuild));
 
 app.get('*', (req, res) => res.sendFile(path.join(appBuild, '/index.html')));
 
-app.listen(PORT, () => console.log(`the app listening on ${PORT}!`));
+app.listen(PORT, () => console.info(`the app listening on ${PORT}!`));
