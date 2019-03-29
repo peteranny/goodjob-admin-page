@@ -20,7 +20,7 @@ jobs:
         docker:
             - image: alpine
         environment:
-            REGISTRY: "registry.gitlab.com/goodjoblife/i/goodjob-admin-page"
+            REGISTRY: "reg.goodjob.life/goodjob/admin-page"
         steps:
             - checkout
             - run:
@@ -31,7 +31,7 @@ jobs:
             - setup_remote_docker
             - run:
                 name: Login docker registry
-                command: docker login registry.gitlab.com -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASS}
+                command: docker login reg.goodjob.life -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASS}
             - run:
                 name: Build Docker and Push
                 command: |
@@ -47,7 +47,7 @@ jobs:
         docker:
             - image: alpine
         environment:
-            REGISTRY: "registry.gitlab.com/goodjoblife/i/goodjob-admin-page"
+            REGISTRY: "reg.goodjob.life/goodjob/admin-page"
         steps:
             - checkout
             - run:
@@ -58,7 +58,7 @@ jobs:
             - setup_remote_docker
             - run:
                 name: Login docker registry
-                command: docker login registry.gitlab.com -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASS}
+                command: docker login reg.goodjob.life -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_PASS}
             - run:
                 name: Build Docker and Push
                 command: |
